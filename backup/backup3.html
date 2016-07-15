@@ -114,7 +114,7 @@
 		x: 300,
 		y: 300,
 		vx: 12,
-		vy: 13
+		vy: 12
 	}
 
 	var player_1_score_element = document.getElementById("player_1_score");
@@ -172,11 +172,6 @@
 			ball_model.vy = ball_model.vy * -1;
 		}
 
-		//check if the ball is colliding with the right edge
-		// if (ball_model.x > 800 - 20 && ball_model.vx > 0) {
-		// 	//flip the y direction
-		// 	ball_model.vx = ball_model.vx * -1;
-		// }
 		if (ball_model.x) {
 		// //check if the ball is colliding with the ceiling:
 		// if the ball is moving towards the ceiling ( along y axis where y is getting closer to 0) and surpasses the height of the screen (600px) then flip the y direction so that the ball moves in the opposite direction from where it was coming from
@@ -189,6 +184,11 @@
 		// paddle_2 will follow the x 
 		paddle_2_model.y = paddle_2_model.y + paddle_2_model.vy;
 		}
+
+		//match paddle_2's velocity with that of ball_model.vx & ball_model.vy
+		// if (paddle_2_model.y) {
+ 	// 	paddle_2_model = ball_model.vx + ball_model.vy;
+		// }
 
 		//check if paddle_2 is colliding with the edge
 		if (paddle_2_model.y > 600 - 100 && paddle_2_model.vy > 0) {
@@ -217,7 +217,17 @@
 		//draw the ball
 		ball_element.style.top = ball_model.y + "px";
 		ball_element.style.left = ball_model.x + "px";
-		
+
+		// //re-draw the ball once it's exited the right screen
+		// if (ball_model.x < 800 + 20 && ball_model.vx < 0) {
+		// 	ball_element.style.left = ball_model.x + "px";
+		// }
+
+		// //re-draw the ball once it's exited the left screen
+		// if (ball_model.x > 0 && ball_model.vx > 0) { {
+		// 	ball_element.style.top = ball_model.y + "px";
+		// }
+
 		//draw the players' scores
 		player_1_score_element.innerHTML = player_1_score;
 		player_2_score_element.innerHTML = player_2_score;
