@@ -25,11 +25,12 @@
 		}
 
 		.score {
-			width: 625px;
-			height: 30px;
+			width: 600px;
+			height: 60px;
 			background-color: white;
-			border: 2px solid black;
+			border: 2px solid red;
 			margin: 50px;
+			padding: 10px;
 			position: absolute;
 			font-style: sans-serif;
 			font-size: 100%;
@@ -39,9 +40,9 @@
 			width: 100px;
 			height: 30px;
 			background-color: blue;
-			border: 2px solid red;
+			border: 1px solid red;
 			padding: 10px;
-			margin: 100px;
+			margin: 0px;
 			left: 100px;
 			position: absolute;
 			font-style: arial black;
@@ -52,10 +53,10 @@
 			width: 100px;
 			height: 30px;
 			background-color: yellow;
-			border: 2px solid red;
+			border: 1px solid red;
 			padding: 10px;
-			margin: 100px;
-			left: 400px;
+			margin: 0px;
+			left: 410px;
 			position: absolute;
 			font-style: arial black;
 			font-size: 110%;
@@ -79,9 +80,9 @@
 		<div class="paddle" id="paddle_2"></div>
 		<div class="ball" id="ball"></div>
 			
-		<div id="score">
-			<div class="score" id="player_1_score"></div>
-			<div class="score" id="player_2_score"></div>
+		<div class="score">
+			<div class="score1" id="player_1_score"></div>
+			<div class="score2" id="player_2_score"></div>
 		</div>
 	</div>
 <!-- 	<div id="player_1_score"></div> -->
@@ -104,24 +105,24 @@
 
 	var paddle_2_element = document.getElementById("paddle_2");
 	var paddle_2_model = {
-		x: 20,
+		x: 760,
 		y: 200,
-		vy: 12
+		vy: 6
 	};
 
 	var ball_element = document.getElementById("ball");
 	var ball_model = {
 		x: 300,
 		y: 300,
-		vx: 12,
-		vy: 13
+		vx: 6,
+		vy: 7
 	}
 
 	var player_1_score_element = document.getElementById("player_1_score");
-	var player_1_score = "player 1 score";
+	var player_1_score = 0;
 
 	var player_2_score_element = document.getElementById("player_2_score");
-	var player_2_score = "player 2 score";
+	var player_2_score = 0;
 
 	
 
@@ -161,17 +162,30 @@
 		// }
 
 		//check if ball is colliding with paddle_1
-		if (ball_model.x < paddle_1_model.x + 20 && ball_model.y + 20 > paddle_1_model.y && ball_model.y < paddle_1_model.y + 100) {
+		if (ball_model.x < paddle_1_model.x + 20 && ball_model.y + 20 > paddle_1_model.y && ball_model.y < paddle_1_model.y + 100 && ball_model.x + 20 > paddle_1_model.x) {
 			ball_model.vy = ball_model.vy * -1;
 			ball_model.vx = ball_model.vx * -1;
 		}
 
 		//check if ball is colliding with paddle_2
-		if (ball_model.x > paddle_2_model.y + 20 && ball_model.y + 20 > paddle_2_model.y && ball_model.y < paddle_2_model.y) {
+		if (ball_model.x < paddle_2_model.x + 20 && ball_model.y + 20 > paddle_2_model.y && ball_model.y < paddle_2_model.y + 100 && ball_model.x + 20 > paddle_2_model.x) {
 			ball_model.vx = ball_model.vx * -1;
 			ball_model.vy = ball_model.vy * -1;
 		}
 
+		//check if ball is exiting right edge and resets to center
+		if (ball_model.x > 800 - 20 && ball_model.vx > 0) {
+			player_1_score += 1;
+			ball_model.x = 400;
+			ball_model.y = 300;
+		}
+
+		//check if ball is exiting left edge and resets to center
+		if (ball_model.x < 0 && ball_model.vx < 0) {
+			player_2_score += 1;
+			ball_model.x = 400;
+			ball_model.y = 300;
+		}
 		//check if the ball is colliding with the right edge
 		// if (ball_model.x > 800 - 20 && ball_model.vx > 0) {
 		// 	//flip the y direction
@@ -203,6 +217,8 @@
 			paddle_2_model.vy = paddle_2_model.vy * -1;
 		}
 
+		paddle_2_model.y = ball_model.y - 50;
+
 	}
 	//draw
 	function draw() {
@@ -212,7 +228,7 @@
 
 		//draw paddle 2
 		paddle_2_element.style.top = paddle_2_model.y + "px";
-		paddle_2_element.style.right = paddle_2_model.x + "px";
+		paddle_2_element.style.left = paddle_2_model.x + "px";
 
 		//draw the ball
 		ball_element.style.top = ball_model.y + "px";
@@ -230,7 +246,7 @@
 
 	document.getElementById("screen").onmousemove = onMouseMove;
 
-	setInterval(loop, 1000/30);
+	setInterval(loop, 1000/60);
 
 
 	</script>
